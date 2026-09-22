@@ -1049,7 +1049,7 @@ async def fetch_scrape(session, engine, dork, offset, semaphore, proxy_list=None
                 if attempt == 0: await asyncio.sleep(0.05)
         return []
 
-async def search_urls_from_dorks(dorks, limit=100_000, progress_callback=None, stop_event=None, proxy_list=None):
+async def search_urls_from_dorks(dorks, limit=200_0000, progress_callback=None, stop_event=None, proxy_list=None):
     if proxy_list is None: proxy_list = []
     found = {}; seen = set(); domains = {}
     total = len(dorks); retries = 0
@@ -2889,7 +2889,7 @@ async def _run_parser(update, context, dorks):
                 reply_markup=stop_kb, parse_mode=ParseMode.MARKDOWN)
         except: pass
     _inner = asyncio.ensure_future(search_urls_from_dorks(
-        dorks, limit=max(100_000, total*2), progress_callback=on_prog,
+        dorks, limit=max(200_0000, total*2), progress_callback=on_prog,
         stop_event=se, proxy_list=effective_proxy_pool(uid)))
     try:
         timeout_s = max(600, min(int(total * 2), 43200))  # max 12 hours
@@ -3003,7 +3003,7 @@ async def _run_dump(update, context, dorks, prefound):
             f"🪵 Pᴀʀsɪɴɢ `{len(dorks)}` Dᴏʀᴋs...",
             reply_markup=stop_kb, parse_mode=ParseMode.MARKDOWN)
         urls = await search_urls_from_dorks(
-            dorks, limit=100_000, stop_event=se,
+            dorks, limit=200_0000, stop_event=se,
             proxy_list=effective_proxy_pool(uid))
         if not urls:
             await msg.edit_text("⚠️ Nᴏ URLs.")
