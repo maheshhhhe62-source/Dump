@@ -1049,7 +1049,7 @@ async def fetch_scrape(session, engine, dork, offset, semaphore, proxy_list=None
                 if attempt == 0: await asyncio.sleep(0.05)
         return []
 
-async def search_urls_from_dorks(dorks, limit=200_0000, progress_callback=None, stop_event=None, proxy_list=None):
+async def search_urls_from_dorks(dorks, limit=200000, progress_callback=None, stop_event=None, proxy_list=None):
     if proxy_list is None: proxy_list = []
     found = {}; seen = set(); domains = {}
     total = len(dorks); retries = 0
@@ -2889,7 +2889,7 @@ async def _run_parser(update, context, dorks):
                 reply_markup=stop_kb, parse_mode=ParseMode.MARKDOWN)
         except: pass
     _inner = asyncio.ensure_future(search_urls_from_dorks(
-        dorks, limit=max(200_0000, total*2), progress_callback=on_prog,
+        dorks, limit=max(200000, total*2), progress_callback=on_prog,
         stop_event=se, proxy_list=effective_proxy_pool(uid)))
     try:
         timeout_s = max(600, min(int(total * 2), 43200))  # max 12 hours
@@ -2918,7 +2918,7 @@ async def sqli_file(update, context):
     doc = update.message.document
     f = await context.bot.get_file(doc.file_id)
     data = await f.download_as_bytearray()
-    urls = [u.strip() for u in data.decode("utf-8", errors="ignore").splitlines() if u.strip().startswith("http")][:10000]
+    urls = [u.strip() for u in data.decode("utf-8", errors="ignore").splitlines() if u.strip().startswith("http")][:200000]
     if not urls: await update.message.reply_text("❌ Nᴏ URLs."); return SQLI_URLS
     return await _run_sqli(update, context, urls)
 
@@ -2983,7 +2983,7 @@ async def urldump_file(update, context):
     doc = update.message.document
     f = await context.bot.get_file(doc.file_id)
     data = await f.download_as_bytearray()
-    urls = [u.strip() for u in data.decode("utf-8", errors="ignore").splitlines() if u.strip().startswith("http")][:5000]
+    urls = [u.strip() for u in data.decode("utf-8", errors="ignore").splitlines() if u.strip().startswith("http")][:200000]
     if not urls: await update.message.reply_text("❌ Nᴏ URLs."); return URL_DUMP
     return await _run_dump(update, context, [], urls)
 
@@ -3003,7 +3003,7 @@ async def _run_dump(update, context, dorks, prefound):
             f"🪵 Pᴀʀsɪɴɢ `{len(dorks)}` Dᴏʀᴋs...",
             reply_markup=stop_kb, parse_mode=ParseMode.MARKDOWN)
         urls = await search_urls_from_dorks(
-            dorks, limit=200_0000, stop_event=se,
+            dorks, limit=200000, stop_event=se,
             proxy_list=effective_proxy_pool(uid))
         if not urls:
             await msg.edit_text("⚠️ Nᴏ URLs.")
