@@ -2892,7 +2892,7 @@ async def _run_parser(update, context, dorks):
         dorks, limit=max(100_000, total*2), progress_callback=on_prog,
         stop_event=se, proxy_list=effective_proxy_pool(uid)))
     try:
-        urls = await asyncio.wait_for(asyncio.shield(_inner), timeout=float(timeout_s))
+        timeout_s = max(600, min(int(total * 2), 43200))  # max 12 hours
     except asyncio.TimeoutError:
         se.set()
         try: urls = await asyncio.wait_for(_inner, timeout=15.0)
@@ -3003,7 +3003,7 @@ async def _run_dump(update, context, dorks, prefound):
             f"🪵 Pᴀʀsɪɴɢ `{len(dorks)}` Dᴏʀᴋs...",
             reply_markup=stop_kb, parse_mode=ParseMode.MARKDOWN)
         urls = await search_urls_from_dorks(
-            dorks, limit=10_000, stop_event=se,
+            dorks, limit=100_000, stop_event=se,
             proxy_list=effective_proxy_pool(uid))
         if not urls:
             await msg.edit_text("⚠️ Nᴏ URLs.")
