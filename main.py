@@ -52,8 +52,7 @@ ADMIN_IDS      = [int(x) for x in _admin_env.split(",") if x.strip().isdigit()]
 ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "@your_username")
 TRIAL_MINUTES  = int(os.environ.get("TRIAL_MINUTES", 5))
 COUPON_CODE    = os.environ.get("COUPON_CODE", "lol")
-TRIAL_MINUTES  = 5
-COUPON_CODE    = "lol"
+
 
 DEFAULT_LEVEL     = 3
 DEFAULT_RISK      = 2
